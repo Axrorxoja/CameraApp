@@ -129,7 +129,9 @@ class AutoFitPreviewBuilder private constructor(
 
     /** Helper function that fits a camera preview into the given [TextureView] */
     private fun updateTransform(
-        textureView: TextureView?, rotation: Int?, newBufferDimens: Size,
+        textureView: TextureView?,
+        rotation: Int?,
+        newBufferDimens: Size,
         newViewFinderDimens: Size
     ) {
         // This should not happen anyway, but now the linter knows
@@ -181,7 +183,7 @@ class AutoFitPreviewBuilder private constructor(
         val centerY = viewFinderDimens.height / 2f
 
         // Correct preview output to account for display rotation
-        matrix.postRotate(-viewFinderRotation!!.toFloat(), centerX, centerY)
+        matrix.postRotate(viewFinderRotation!!.toFloat(), centerX, centerY)
 
         // Buffers are rotated relative to the device's 'natural' orientation: swap width and height
         val bufferRatio = bufferDimens.height / bufferDimens.width.toFloat()
