@@ -88,6 +88,10 @@ class ImageCaptureFragment : Fragment(R.layout.fragment_image_capture_fragment) 
             bindCameraUseCases()
 
         }
+       setUpTapToFocus()
+    }
+
+    private fun setUpTapToFocus() {
         view_finder.setOnTouchListener { _, motionEvent ->
             val point = TextureViewMeteringPointFactory(view_finder)
                 .createPoint(motionEvent.x, motionEvent.y)

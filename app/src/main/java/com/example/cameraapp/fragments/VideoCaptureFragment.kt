@@ -88,6 +88,10 @@ class VideoCaptureFragment : Fragment(R.layout.fragment_video_capture_fragment) 
         }
 
         initOnBackHanlder()
+        setUpTapToFocus()
+    }
+
+    private fun setUpTapToFocus() {
         view_finder.setOnTouchListener { _, motionEvent ->
             val point = TextureViewMeteringPointFactory(view_finder)
                 .createPoint(motionEvent.x, motionEvent.y)
