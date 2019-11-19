@@ -3,11 +3,14 @@ package com.example.cameraapp.fragments
 import AutoFitPreviewBuilder
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.camera.core.*
 import androidx.camera.view.TextureViewMeteringPointFactory
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.cameraapp.MainActivity
@@ -34,7 +37,14 @@ class VideoCaptureFragment : Fragment(R.layout.fragment_video_capture_fragment) 
     private var lensFacing = CameraX.LensFacing.BACK
     private var preview: Preview? = null
     private var videoCapture: VideoCapture? = null
-
+    private var isRecording = false
+    private val handler: Handler by lazy(LazyThreadSafetyMode.NONE) { Handler() }
+    private val navController by lazy(LazyThreadSafetyMode.NONE) {
+        Navigation.findNavController(
+            requireActivity(),
+            R.id.fragment_container
+        )
+    }
 
     override fun onResume() {
         super.onResume()
@@ -73,8 +83,11 @@ class VideoCaptureFragment : Fragment(R.layout.fragment_video_capture_fragment) 
             // Build UI controls and bind all camera use cases
             updateCameraUi()
             bindCameraUseCases()
+            camera_capture_button.performClick()
 
         }
+
+        initOnBackHanlder()
         view_finder.setOnTouchListener { _, motionEvent ->
             val point = TextureViewMeteringPointFactory(view_finder)
                 .createPoint(motionEvent.x, motionEvent.y)
@@ -84,6 +97,23 @@ class VideoCaptureFragment : Fragment(R.layout.fragment_video_capture_fragment) 
             CameraX.getCameraControl(CameraX.LensFacing.BACK).startFocusAndMetering(action)
             false
         }
+    }
+
+    private fun initOnBackHanlder() {
+        requireActivity()
+            .onBackPressedDispatcher
+            .addCallback(this, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    videoCapture?.apply {
+                        if (isRecording)
+                            stopRecording()
+                    }
+                    handler.postDelayed({
+                        navController.popBackStack()
+                    }, 1000)
+                }
+
+            })
     }
 
     /** Declare and bind preview, capture and analysis use cases */
@@ -129,6 +159,7 @@ class VideoCaptureFragment : Fragment(R.layout.fragment_video_capture_fragment) 
         camera_capture_button.setOnLongClickListener {
             videoCapture?.apply {
                 stopRecording()
+                isRecording = false
             }
             true
         }
@@ -137,15 +168,15 @@ class VideoCaptureFragment : Fragment(R.layout.fragment_video_capture_fragment) 
             videoCapture?.apply {
 
                 // Create output file to hold the image
-                val photoFile = createFile(outputDirectory)
+                val videoFile = createFile(outputDirectory)
 
                 val metadata = VideoCapture.Metadata()
                     .apply {
                     }
 
                 // Setup image capture listener which is triggered after photo has been taken
-                startRecording(photoFile, metadata, executor, videoCaptureLister)
-
+                startRecording(videoFile, metadata, executor, videoCaptureLister)
+                isRecording = true
             }
         }
 

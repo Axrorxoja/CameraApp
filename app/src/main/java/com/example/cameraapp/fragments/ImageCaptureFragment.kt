@@ -41,6 +41,12 @@ class ImageCaptureFragment : Fragment(R.layout.fragment_image_capture_fragment) 
     private var lensFacing = CameraX.LensFacing.BACK
     private var preview: Preview? = null
     private var imageCapture: ImageCapture? = null
+    private val navController by lazy(LazyThreadSafetyMode.NONE) {
+        Navigation.findNavController(
+            requireActivity(),
+            R.id.fragment_container
+        )
+    }
 
 
     override fun onResume() {
@@ -48,7 +54,7 @@ class ImageCaptureFragment : Fragment(R.layout.fragment_image_capture_fragment) 
         // Make sure that all permissions are still present, since user could have removed them
         //  while the app was on paused state
         if (!PermissionsFragment.hasPermissions(requireContext())) {
-            Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
+            navController.navigate(
                 ImageCaptureFragmentDirections.actionCameraToPermissions()
             )
 
@@ -145,17 +151,21 @@ class ImageCaptureFragment : Fragment(R.layout.fragment_image_capture_fragment) 
 
         // Listener for button used to view last photo
         val navController = Navigation.findNavController(requireActivity(), R.id.fragment_container)
-        photo_view_button.setOnClickListener(
-            Navigation.createNavigateOnClickListener(
-                ImageCaptureFragmentDirections.actionCameraToGallery(outputDirectory.absolutePath)
-            )
-        )
+        photo_view_button.setOnClickListener {
+            navController
+                .navigate(
+                    ImageCaptureFragmentDirections
+                        .actionCameraToGallery(outputDirectory.absolutePath)
+                )
+        }
 
-        camera_record_button.setOnClickListener(
-            Navigation.createNavigateOnClickListener(
-                ImageCaptureFragmentDirections.actionCameraFragmentToVideoCaptureFragment()
-            )
-        )
+        camera_record_button.setOnClickListener {
+            navController
+                .navigate(
+                    ImageCaptureFragmentDirections
+                        .actionCameraFragmentToVideoCaptureFragment()
+                )
+        }
     }
 
     private fun switchCamera() {
