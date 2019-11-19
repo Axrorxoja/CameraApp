@@ -33,7 +33,6 @@ class VideoCaptureFragment : Fragment(R.layout.fragment_video_capture_fragment) 
 
     private var lensFacing = CameraX.LensFacing.BACK
     private var preview: Preview? = null
-    private var imageCapture: ImageCapture? = null
     private var videoCapture: VideoCapture? = null
 
 
@@ -107,7 +106,7 @@ class VideoCaptureFragment : Fragment(R.layout.fragment_video_capture_fragment) 
 
         // Apply declared configs to CameraX using the same lifecycle owner
         CameraX.bindToLifecycle(
-            viewLifecycleOwner, preview, imageCapture
+            viewLifecycleOwner, preview, videoCapture
         )
     }
 

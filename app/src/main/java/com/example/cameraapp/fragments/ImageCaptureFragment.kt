@@ -138,60 +138,71 @@ class ImageCaptureFragment : Fragment(R.layout.fragment_image_capture_fragment) 
     private fun updateCameraUi() {
 
         // Listener for button used to capture photo
-        camera_capture_button.setOnClickListener {
-            // Get a stable reference of the modifiable image capture use case
-            imageCapture?.apply {
-
-                // Create output file to hold the image
-                val photoFile = createFile(outputDirectory)
-
-//                // Setup image capture metadata
-                val metadata = ImageCapture.Metadata().apply {
-                    // Mirror image when using the front camera
-                    isReversedHorizontal = lensFacing == CameraX.LensFacing.FRONT
-                }
-
-                // Setup image capture listener which is triggered after photo has been taken
-                takePicture(photoFile, metadata, executor, imageSavedListener)
-
-//                 We can only change the foreground Drawable using API level 23+ API
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-                    // Display flash animation to indicate that photo was captured
-                    camera_container.postDelayed({
-                        camera_container.foreground = ColorDrawable(Color.WHITE)
-                        camera_container.postDelayed(
-                            { camera_container.foreground = null }, ANIMATION_FAST_MILLIS
-                        )
-                    }, ANIMATION_SLOW_MILLIS)
-                }
-            }
-        }
+        camera_capture_button.setOnClickListener { takeCapture() }
 
         // Listener for button used to switch cameras
-        camera_switch_button.setOnClickListener {
-            lensFacing = if (CameraX.LensFacing.FRONT == lensFacing) {
-                CameraX.LensFacing.BACK
-            } else {
-                CameraX.LensFacing.FRONT
-            }
-            try {
-                // Only bind use cases if we can query a camera with this orientation
-                CameraX.getCameraWithLensFacing(lensFacing)
-
-                // Unbind all use cases and bind them again with the new lens facing configuration
-                CameraX.unbindAll()
-                bindCameraUseCases()
-            } catch (exc: Exception) {
-                // Do nothing
-            }
-        }
+        camera_switch_button.setOnClickListener { switchCamera() }
 
         // Listener for button used to view last photo
-        photo_view_button.setOnClickListener {
-            Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
+        val navController = Navigation.findNavController(requireActivity(), R.id.fragment_container)
+        photo_view_button.setOnClickListener(
+            Navigation.createNavigateOnClickListener(
                 ImageCaptureFragmentDirections.actionCameraToGallery(outputDirectory.absolutePath)
             )
+        )
+
+        camera_record_button.setOnClickListener(
+            Navigation.createNavigateOnClickListener(
+                ImageCaptureFragmentDirections.actionCameraFragmentToVideoCaptureFragment()
+            )
+        )
+    }
+
+    private fun switchCamera() {
+        lensFacing = if (CameraX.LensFacing.FRONT == lensFacing) {
+            CameraX.LensFacing.BACK
+        } else {
+            CameraX.LensFacing.FRONT
+        }
+        try {
+            // Only bind use cases if we can query a camera with this orientation
+            CameraX.getCameraWithLensFacing(lensFacing)
+
+            // Unbind all use cases and bind them again with the new lens facing configuration
+            CameraX.unbindAll()
+            bindCameraUseCases()
+        } catch (exc: Exception) {
+            // Do nothing
+        }
+    }
+
+    private fun takeCapture() {
+        // Get a stable reference of the modifiable image capture use case
+        imageCapture?.apply {
+
+            // Create output file to hold the image
+            val photoFile = createFile(outputDirectory)
+
+//                // Setup image capture metadata
+            val metadata = ImageCapture.Metadata().apply {
+                // Mirror image when using the front camera
+                isReversedHorizontal = lensFacing == CameraX.LensFacing.FRONT
+            }
+
+            // Setup image capture listener which is triggered after photo has been taken
+            takePicture(photoFile, metadata, executor, imageSavedListener)
+
+//                 We can only change the foreground Drawable using API level 23+ API
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+                // Display flash animation to indicate that photo was captured
+                camera_container.postDelayed({
+                    camera_container.foreground = ColorDrawable(Color.WHITE)
+                    camera_container.postDelayed(
+                        { camera_container.foreground = null }, ANIMATION_FAST_MILLIS
+                    )
+                }, ANIMATION_SLOW_MILLIS)
+            }
         }
     }
 
