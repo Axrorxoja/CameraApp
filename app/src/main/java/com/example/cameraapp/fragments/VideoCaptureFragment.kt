@@ -9,13 +9,11 @@ import androidx.camera.view.TextureViewMeteringPointFactory
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.cameraapp.MainActivity
 import com.example.cameraapp.R
-import kotlinx.android.synthetic.main.camera_ui_container.*
-import kotlinx.android.synthetic.main.fragment_camera.*
+import kotlinx.android.synthetic.main.fragment_image_capture_fragment.*
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -29,7 +27,7 @@ import java.util.concurrent.Executors
 private const val FILENAME = "yyyy-MM-dd-HH-mm-ss-SSS"
 private const val VIDEO_EXTENSION = ".mp4"
 
-class VideoCaptureFragment : Fragment(R.layout.fragment_camera) {
+class VideoCaptureFragment : Fragment(R.layout.fragment_image_capture_fragment) {
 
     private lateinit var outputDirectory: File
     private val executor by lazy(LazyThreadSafetyMode.NONE) { Executors.newSingleThreadExecutor() }
@@ -79,7 +77,7 @@ class VideoCaptureFragment : Fragment(R.layout.fragment_camera) {
             bindCameraUseCases()
 
         }
-        view_finder.setOnTouchListener { v, motionEvent ->
+        view_finder.setOnTouchListener { _, motionEvent ->
             val point = TextureViewMeteringPointFactory(view_finder)
                 .createPoint(motionEvent.x, motionEvent.y)
             val action = FocusMeteringAction.Builder
@@ -128,15 +126,6 @@ class VideoCaptureFragment : Fragment(R.layout.fragment_camera) {
     /** Method used to re-draw the camera UI controls, called every time configuration changes */
     @SuppressLint("RestrictedApi")
     private fun updateCameraUi() {
-
-        // Remove previous UI if any
-        camera_container.findViewById<ConstraintLayout>(R.id.camera_ui_container)?.let {
-            camera_container.removeView(it)
-        }
-
-        // Inflate a new view containing all UI for controlling the camera
-        val controls =
-            View.inflate(requireContext(), R.layout.camera_ui_container_with_out_switch, camera_container)
 
         // Listener for button used to capture photo
         camera_capture_button.setOnLongClickListener {

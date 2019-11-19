@@ -33,9 +33,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
-            <meta-data
-                android:name="android.notch_support"
-                android:value="true" />
         </activity>
 
         <!-- FileProvider used to share photos with other apps -->

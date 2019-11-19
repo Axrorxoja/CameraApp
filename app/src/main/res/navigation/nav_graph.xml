@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/permissions_fragment">
 
     <fragment
         android:id="@+id/permissions_fragment"
         android:name="com.example.cameraapp.fragments.PermissionsFragment"
+        tools:layout="@layout/fragment_image_capture_fragment"
         android:label="PermissionsFragment">
 
         <action
@@ -19,8 +21,9 @@
 
     <fragment
         android:id="@+id/camera_fragment"
+        tools:layout="@layout/fragment_image_capture_fragment"
         android:name="com.example.cameraapp.fragments.ImageCaptureFragment"
-        android:label="CameraFragment">
+        android:label="ImageCaptureFragment">
 
         <action
             android:id="@+id/action_camera_to_gallery"
@@ -31,16 +34,26 @@
             app:destination="@id/permissions_fragment"
             app:popUpTo="@id/camera_fragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_camera_fragment_to_videoCaptureFragment"
+            app:destination="@id/videoCaptureFragment" />
 
     </fragment>
 
     <fragment
         android:id="@+id/gallery_fragment"
+        tools:layout="@layout/fragment_gallery"
         android:name="com.example.cameraapp.fragments.GalleryFragment"
         android:label="GalleryFragment">
         <argument
             android:name="root_directory"
             app:argType="string" />
     </fragment>
+
+    <fragment
+        android:id="@+id/videoCaptureFragment"
+        tools:layout="@layout/fragment_video_capture_fragment"
+        android:name="com.example.cameraapp.fragments.VideoCaptureFragment"
+        android:label="VideoCaptureFragment" />
 
 </navigation>

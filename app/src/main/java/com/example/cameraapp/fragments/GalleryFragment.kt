@@ -2,7 +2,6 @@ package com.example.cameraapp.fragments
 
 import android.content.Intent
 import android.media.MediaScannerConnection
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,17 +9,14 @@ import android.view.ViewGroup
 import android.webkit.MimeTypeMap
 import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.navigation.fragment.navArgs
-import androidx.viewpager.widget.ViewPager
 import com.example.cameraapp.BuildConfig
 import com.example.cameraapp.R
 import kotlinx.android.synthetic.main.fragment_gallery.*
-import padWithDisplayCutout
 import java.io.File
 
 
@@ -72,13 +68,6 @@ class GalleryFragment internal constructor() : Fragment() {
             adapter = MediaPagerAdapter(childFragmentManager)
         }
 
-        // Make sure that the cutout "safe area" avoids the screen notch if any
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            // Use extension method to pad "inside" view containing UI using display cutout's bounds
-            cutout_safe_area.padWithDisplayCutout()
-        }
-
-        // Handle back button press
         back_button.setOnClickListener { requireFragmentManager().popBackStack() }
 
 
