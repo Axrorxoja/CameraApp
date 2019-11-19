@@ -6,14 +6,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.camera.core.*
 import androidx.camera.view.TextureViewMeteringPointFactory
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.cameraapp.MainActivity
 import com.example.cameraapp.R
-import kotlinx.android.synthetic.main.fragment_image_capture_fragment.*
+import kotlinx.android.synthetic.main.fragment_video_capture_fragment.*
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -27,7 +26,7 @@ import java.util.concurrent.Executors
 private const val FILENAME = "yyyy-MM-dd-HH-mm-ss-SSS"
 private const val VIDEO_EXTENSION = ".mp4"
 
-class VideoCaptureFragment : Fragment(R.layout.fragment_image_capture_fragment) {
+class VideoCaptureFragment : Fragment(R.layout.fragment_video_capture_fragment) {
 
     private lateinit var outputDirectory: File
     private val executor by lazy(LazyThreadSafetyMode.NONE) { Executors.newSingleThreadExecutor() }
@@ -153,7 +152,7 @@ class VideoCaptureFragment : Fragment(R.layout.fragment_image_capture_fragment) 
 
         // Listener for button used to view last photo
         photo_view_button.setOnClickListener {
-//            Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
+            //            Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
 //                CameraFragmentDirections.actionCameraToGallery(outputDirectory.absolutePath)
 //            )
         }
