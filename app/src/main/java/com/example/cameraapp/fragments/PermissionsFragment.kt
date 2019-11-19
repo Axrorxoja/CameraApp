@@ -11,7 +11,8 @@ import androidx.navigation.Navigation
 import com.example.cameraapp.R
 
 private const val PERMISSIONS_REQUEST_CODE = 10
-private val PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.CAMERA)
+private val PERMISSIONS_REQUIRED =
+    arrayOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO)
 
 /**
  * The sole purpose of this fragment is to request permissions and, once granted, display the
@@ -28,19 +29,22 @@ class PermissionsFragment : Fragment() {
         } else {
             // If permissions have already been granted, proceed
             Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
-                    PermissionsFragmentDirections.actionPermissionsToCamera())
+                PermissionsFragmentDirections.actionPermissionsToCamera()
+            )
         }
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        requestCode: Int, permissions: Array<String>, grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PERMISSIONS_REQUEST_CODE) {
             if (PackageManager.PERMISSION_GRANTED == grantResults.firstOrNull()) {
                 // Take the user to the success fragment when permission is granted
                 Toast.makeText(context, "Permission request granted", Toast.LENGTH_LONG).show()
                 Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
-                        PermissionsFragmentDirections.actionPermissionsToCamera())
+                    PermissionsFragmentDirections.actionPermissionsToCamera()
+                )
             } else {
                 Toast.makeText(context, "Permission request denied", Toast.LENGTH_LONG).show()
             }
