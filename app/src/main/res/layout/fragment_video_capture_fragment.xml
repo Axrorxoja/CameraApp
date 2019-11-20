@@ -13,19 +13,19 @@
 
 
     <ImageButton
-        android:id="@+id/camera_capture_button"
+        android:id="@+id/camera_stop_button"
         android:layout_width="@dimen/round_button_large"
         android:layout_height="@dimen/round_button_large"
         android:layout_marginBottom="@dimen/shutter_button_margin"
         android:scaleType="fitCenter"
-        android:background="@drawable/ic_shutter"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:background="@drawable/ic_stop"
+        android:contentDescription="@string/capture_button_alt"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:contentDescription="@string/capture_button_alt" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <ImageButton
-        android:id="@+id/photo_view_button"
+        android:id="@+id/image_view_button"
         android:layout_width="@dimen/round_button_medium"
         android:layout_height="@dimen/round_button_medium"
         android:layout_marginBottom="@dimen/margin_xlarge"
@@ -33,9 +33,24 @@
         android:padding="@dimen/spacing_large"
         android:scaleType="fitCenter"
         android:background="@drawable/ic_outer_circle"
-        app:srcCompat="@drawable/ic_photo"
-        app:layout_constraintRight_toRightOf="parent"
+        android:contentDescription="@string/gallery_button_alt"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:contentDescription="@string/gallery_button_alt" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:srcCompat="@drawable/ic_camera" />
+
+    <ImageButton
+        android:id="@+id/camera_pause_button"
+        android:layout_width="@dimen/round_button_medium"
+        android:layout_height="@dimen/round_button_medium"
+        android:layout_marginBottom="@dimen/margin_xlarge"
+        android:layout_marginStart="@dimen/margin_small"
+        android:padding="@dimen/spacing_small"
+        android:visibility="gone"
+        android:scaleType="fitCenter"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/switch_camera_button_alt"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:srcCompat="@drawable/ic_pause" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

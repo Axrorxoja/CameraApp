@@ -8,11 +8,8 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.camera.core.*
 import androidx.camera.view.TextureViewMeteringPointFactory
-import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.example.cameraapp.MainActivity
 import com.example.cameraapp.R
 import kotlinx.android.synthetic.main.fragment_video_capture_fragment.*
@@ -28,7 +25,9 @@ import java.util.concurrent.Executors
  */
 private const val FILENAME = "yyyy-MM-dd-HH-mm-ss-SSS"
 private const val VIDEO_EXTENSION = ".mp4"
+private const val DEF_TIME_OUT = 1000L
 
+@SuppressLint("RestrictedApi")
 class VideoCaptureFragment : Fragment(R.layout.fragment_video_capture_fragment) {
 
     private lateinit var outputDirectory: File
@@ -38,24 +37,12 @@ class VideoCaptureFragment : Fragment(R.layout.fragment_video_capture_fragment) 
     private var preview: Preview? = null
     private var videoCapture: VideoCapture? = null
     private var isRecording = false
-    private val handler: Handler by lazy(LazyThreadSafetyMode.NONE) { Handler() }
+    private val handler = Handler()
     private val navController by lazy(LazyThreadSafetyMode.NONE) {
         Navigation.findNavController(
             requireActivity(),
             R.id.fragment_container
         )
-    }
-
-    override fun onResume() {
-        super.onResume()
-        // Make sure that all permissions are still present, since user could have removed them
-        //  while the app was on paused state
-        if (!PermissionsFragment.hasPermissions(requireContext())) {
-//            Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
-//                VideoCa.actionCameraToPermissions()
-//            )
-
-        }
     }
 
     private val videoCaptureLister = object : VideoCapture.OnVideoSavedListener {
@@ -79,12 +66,9 @@ class VideoCaptureFragment : Fragment(R.layout.fragment_video_capture_fragment) 
 
         // Wait for the views to be properly laid out
         view_finder.post {
-
-            // Build UI controls and bind all camera use cases
-            updateCameraUi()
+            setUpCameraUI()
             bindCameraUseCases()
-            camera_capture_button.performClick()
-
+            startRecordVideo()
         }
 
         initOnBackHanlder()
@@ -112,12 +96,16 @@ class VideoCaptureFragment : Fragment(R.layout.fragment_video_capture_fragment) 
                         if (isRecording)
                             stopRecording()
                     }
-                    handler.postDelayed({
-                        navController.popBackStack()
-                    }, 1000)
+                    popBackStackWithTimeOut()
                 }
 
             })
+    }
+
+    private fun popBackStackWithTimeOut() {
+        handler.postDelayed({
+            navController.popBackStack()
+        }, DEF_TIME_OUT)
     }
 
     /** Declare and bind preview, capture and analysis use cases */
@@ -155,55 +143,31 @@ class VideoCaptureFragment : Fragment(R.layout.fragment_video_capture_fragment) 
         videoCapture = VideoCapture(videoCaptureConfig)
     }
 
-    /** Method used to re-draw the camera UI controls, called every time configuration changes */
     @SuppressLint("RestrictedApi")
-    private fun updateCameraUi() {
+    private fun setUpCameraUI() {
 
-        // Listener for button used to capture photo
-        camera_capture_button.setOnLongClickListener {
+        camera_stop_button.setOnClickListener {
             videoCapture?.apply {
                 stopRecording()
                 isRecording = false
-            }
-            true
-        }
-        camera_capture_button.setOnClickListener {
-            // Get a stable reference of the modifiable image capture use case
-            videoCapture?.apply {
-
-                // Create output file to hold the image
-                val videoFile = createFile(outputDirectory)
-
-                val metadata = VideoCapture.Metadata()
-                    .apply {
-                    }
-
-                // Setup image capture listener which is triggered after photo has been taken
-                startRecording(videoFile, metadata, executor, videoCaptureLister)
-                isRecording = true
+                popBackStackWithTimeOut()
             }
         }
 
-        // Listener for button used to view last photo
-        photo_view_button.setOnClickListener {
-            //            Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
-//                CameraFragmentDirections.actionCameraToGallery(outputDirectory.absolutePath)
-//            )
-        }
+        image_view_button.setOnClickListener { navController.popBackStack() }
+
+        camera_pause_button.setOnClickListener { }
     }
 
-    private fun setGalleryThumbnail(file: File) {
-        // Run the operations in the view's thread
-        photo_view_button.post {
+    private fun startRecordVideo() {
+        videoCapture?.apply {
 
-            // Remove thumbnail padding
-            photo_view_button.setPadding(resources.getDimension(R.dimen.stroke_small).toInt())
+            // Create output file to hold the image
+            val videoFile = createFile(outputDirectory)
 
-            // Load thumbnail into circular button using Glide
-            Glide.with(photo_view_button)
-                .load(file)
-                .apply(RequestOptions.circleCropTransform())
-                .into(photo_view_button)
+            // Setup image capture listener which is triggered after photo has been taken
+            startRecording(videoFile, executor, videoCaptureLister)
+            isRecording = true
         }
     }
 

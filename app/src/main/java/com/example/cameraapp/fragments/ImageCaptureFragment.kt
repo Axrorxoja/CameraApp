@@ -143,7 +143,6 @@ class ImageCaptureFragment : Fragment(R.layout.fragment_image_capture_fragment) 
         imageCapture = ImageCapture(imageCaptureConfig)
     }
 
-    /** Method used to re-draw the camera UI controls, called every time configuration changes */
     @SuppressLint("RestrictedApi")
     private fun updateCameraUi() {
 
