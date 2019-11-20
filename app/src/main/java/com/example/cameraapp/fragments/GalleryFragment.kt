@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_gallery.*
 import java.io.File
 
 
-val EXTENSION_WHITELIST = arrayOf("JPG","MP4")
+val EXTENSION_WHITELIST = arrayOf("JPG", "MP4")
 
 /** Fragment used to present the user with a gallery of photos taken */
 class GalleryFragment internal constructor() : Fragment() {
@@ -33,7 +33,15 @@ class GalleryFragment internal constructor() : Fragment() {
     /** Adapter class used to present a fragment containing one photo or video as a page */
     inner class MediaPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
         override fun getCount(): Int = mediaList.size
-        override fun getItem(position: Int): Fragment = PhotoFragment.create(mediaList[position])
+        override fun getItem(position: Int): Fragment {
+            val currentItem = mediaList[position]
+            return if (currentItem.extension.toLowerCase() == "jpg") {
+                PhotoFragment.create(currentItem)
+            } else {
+                VideoFragment.create(currentItem)
+            }
+        }
+
         override fun getItemPosition(obj: Any): Int = POSITION_NONE
     }
 
