@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_gallery.*
 import java.io.File
 
 
-val EXTENSION_WHITELIST = arrayOf("JPG")
+val EXTENSION_WHITELIST = arrayOf("JPG","MP4")
 
 /** Fragment used to present the user with a gallery of photos taken */
 class GalleryFragment internal constructor() : Fragment() {

@@ -33,6 +33,8 @@ import java.util.concurrent.Executors
 private const val FILENAME = "yyyy-MM-dd-HH-mm-ss-SSS"
 private const val PHOTO_EXTENSION = ".jpg"
 
+
+@SuppressLint("RestrictedApi")
 class ImageCaptureFragment : Fragment(R.layout.fragment_image_capture_fragment) {
 
     private lateinit var outputDirectory: File

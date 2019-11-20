@@ -4,7 +4,9 @@ import AutoFitPreviewBuilder
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
 import androidx.camera.core.*
 import androidx.camera.view.TextureViewMeteringPointFactory
@@ -38,6 +40,7 @@ class VideoCaptureFragment : Fragment(R.layout.fragment_video_capture_fragment) 
     private var videoCapture: VideoCapture? = null
     private var isRecording = false
     private val handler = Handler()
+    private val task = Task()
     private val navController by lazy(LazyThreadSafetyMode.NONE) {
         Navigation.findNavController(
             requireActivity(),
@@ -153,10 +156,11 @@ class VideoCaptureFragment : Fragment(R.layout.fragment_video_capture_fragment) 
                 popBackStackWithTimeOut()
             }
         }
-
         image_view_button.setOnClickListener { navController.popBackStack() }
+        val anim = AnimationUtils.loadAnimation(requireContext(), R.anim.visible_animator)
+        view_anim.startAnimation(anim)
 
-        camera_pause_button.setOnClickListener { }
+        handler.post(task)
     }
 
     private fun startRecordVideo() {
@@ -171,10 +175,40 @@ class VideoCaptureFragment : Fragment(R.layout.fragment_video_capture_fragment) 
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        view_anim.clearAnimation()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        task.isStopped = true
+        handler.removeCallbacks(task)
+    }
+
     /** Helper function used to create a timestamped file */
     private fun createFile(baseFolder: File) =
         File(
             baseFolder, SimpleDateFormat(FILENAME, Locale.US)
                 .format(System.currentTimeMillis()) + VIDEO_EXTENSION
         )
+
+    inner class Task : Runnable {
+        private var counter = 0L
+        private val ONE_SECOND = 1000L
+        private val sd = SimpleDateFormat("mm-ss", Locale.getDefault())
+        var isStopped = false
+
+        override fun run() {
+            if (isStopped) return
+
+            counter++
+            handler.postDelayed(this, ONE_SECOND)
+            val timeText = sd.format(Date(counter * ONE_SECOND))
+            tv_time.text = timeText
+            Log.d("RUN", timeText)
+        }
+
+    }
 }
+
