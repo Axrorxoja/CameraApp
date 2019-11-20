@@ -90,7 +90,7 @@ class ImageCaptureFragment : Fragment(R.layout.fragment_image_capture_fragment) 
             bindCameraUseCases()
 
         }
-       setUpTapToFocus()
+        setUpTapToFocus()
     }
 
     private fun setUpTapToFocus() {

@@ -12,7 +12,7 @@ import java.io.File
 
 
 /** Fragment used for each individual page showing a video inside of [GalleryFragment] */
-class VideoFragment : Fragment(R.layout.video_item) {
+class VideoFragment internal constructor() : Fragment(R.layout.video_item) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

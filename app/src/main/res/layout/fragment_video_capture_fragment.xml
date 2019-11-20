@@ -64,7 +64,7 @@
         app:layout_constraintBottom_toTopOf="@+id/camera_stop_button"
         app:layout_constraintEnd_toEndOf="@+id/camera_stop_button"
         app:layout_constraintStart_toStartOf="@+id/camera_stop_button"
-        tools:text="00:01" />
+        android:text="00:00" />
 
     <View
         android:id="@+id/view_anim"

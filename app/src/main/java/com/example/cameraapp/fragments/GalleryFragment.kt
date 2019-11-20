@@ -2,12 +2,12 @@ package com.example.cameraapp.fragments
 
 import android.content.Intent
 import android.media.MediaScannerConnection
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
-import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -106,7 +106,7 @@ class GalleryFragment internal constructor() : Fragment() {
         }
 
         // Handle delete button press
-        view.findViewById<ImageButton>(R.id.delete_button).setOnClickListener {
+        delete_button.setOnClickListener {
             AlertDialog.Builder(view.context, android.R.style.Theme_Material_Dialog)
                 .setTitle(getString(R.string.delete_title))
                 .setMessage(getString(R.string.delete_dialog))
@@ -136,5 +136,20 @@ class GalleryFragment internal constructor() : Fragment() {
                 .setNegativeButton(android.R.string.no, null)
                 .show()
         }
+
+        export_button.setOnClickListener {
+            mediaList
+                .getOrNull(photo_view_pager.currentItem)
+                ?.let { exportToGallery(it) }
+        }
+
+
+    }
+
+    private fun exportToGallery(newFile: File) {
+        val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+        val contentUri = Uri.fromFile(newFile)
+        mediaScanIntent.data = contentUri
+        requireActivity().sendBroadcast(mediaScanIntent)
     }
 }

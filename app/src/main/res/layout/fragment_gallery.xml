@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2019 Google LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +13,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -23,9 +21,9 @@
     android:layoutDirection="ltr">
 
     <androidx.viewpager.widget.ViewPager
+        android:id="@+id/photo_view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/photo_view_pager" />
+        android:layout_height="match_parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cutout_safe_area"
@@ -35,43 +33,55 @@
         <ImageButton
             android:id="@+id/back_button"
             android:contentDescription="@string/back_button_alt"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginStart="@dimen/margin_xsmall"
             android:layout_marginTop="@dimen/margin_small"
             android:layout_width="@dimen/round_button_small"
             android:layout_height="@dimen/round_button_small"
             android:scaleType="fitCenter"
             android:background="@android:color/transparent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_back" />
 
         <ImageButton
             android:id="@+id/share_button"
             android:contentDescription="@string/share_button_alt"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             android:layout_marginEnd="@dimen/margin_xlarge"
             android:layout_marginBottom="@dimen/margin_small"
             android:layout_width="@dimen/round_button_small"
             android:layout_height="@dimen/round_button_small"
             android:scaleType="fitCenter"
             android:background="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/delete_button"
+            app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/ic_share" />
 
         <ImageButton
             android:id="@+id/delete_button"
             android:contentDescription="@string/delete_button_alt"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:layout_width="@dimen/round_button_small"
+            android:layout_height="@dimen/round_button_small"
+            android:scaleType="fitCenter"
+            android:background="@android:color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/export_button"
+            app:layout_constraintStart_toEndOf="@+id/share_button"
+            app:srcCompat="@drawable/ic_delete" />
+
+        <ImageButton
+            android:id="@+id/export_button"
             android:layout_marginStart="@dimen/margin_xlarge"
             android:layout_marginBottom="@dimen/margin_small"
             android:layout_width="@dimen/round_button_small"
             android:layout_height="@dimen/round_button_small"
             android:scaleType="fitCenter"
             android:background="@android:color/transparent"
-            app:srcCompat="@drawable/ic_delete" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/delete_button"
+            app:srcCompat="@drawable/ic_export" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
