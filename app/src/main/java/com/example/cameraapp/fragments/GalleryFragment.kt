@@ -137,19 +137,19 @@ class GalleryFragment internal constructor() : Fragment() {
                 .show()
         }
 
-        export_button.setOnClickListener {
-            mediaList
-                .getOrNull(photo_view_pager.currentItem)
-                ?.let { exportToGallery(it) }
-        }
+//        export_button.setOnClickListener {
+//            mediaList
+//                .getOrNull(photo_view_pager.currentItem)
+//                ?.let { exportToGallery(it) }
+//        }
 
 
     }
 
-    private fun exportToGallery(newFile: File) {
-        val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-        val contentUri = Uri.fromFile(newFile)
-        mediaScanIntent.data = contentUri
-        requireActivity().sendBroadcast(mediaScanIntent)
-    }
+//    private fun exportToGallery(newFile: File) {
+//        val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+//        val contentUri = Uri.fromFile(newFile)
+//        mediaScanIntent.data = contentUri
+//        requireActivity().sendBroadcast(mediaScanIntent)
+//    }
 }

@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageButton
 import androidx.camera.core.*
 import androidx.camera.core.ImageCapture.CaptureMode
 import androidx.camera.view.TextureViewMeteringPointFactory
@@ -157,6 +158,9 @@ class ImageCaptureFragment : Fragment(R.layout.fragment_image_capture_fragment) 
         // Listener for button used to view last photo
         val navController = Navigation.findNavController(requireActivity(), R.id.fragment_container)
         photo_view_button.setOnClickListener {
+            val bundle = Bundle().apply {
+                putString("root_directory", outputDirectory.absolutePath)
+            }
             navController
                 .navigate(
                     ImageCaptureFragmentDirections
@@ -223,17 +227,19 @@ class ImageCaptureFragment : Fragment(R.layout.fragment_image_capture_fragment) 
 
     private fun setGalleryThumbnail(file: File) {
         // Run the operations in the view's thread
-        photo_view_button.post {
+        view
+            ?.findViewById<ImageButton>(R.id.photo_view_button)
+            ?.post {
 
-            // Remove thumbnail padding
-            photo_view_button.setPadding(resources.getDimension(R.dimen.stroke_small).toInt())
+                // Remove thumbnail padding
+                photo_view_button.setPadding(resources.getDimension(R.dimen.stroke_small).toInt())
 
-            // Load thumbnail into circular button using Glide
-            Glide.with(photo_view_button)
-                .load(file)
-                .apply(RequestOptions.circleCropTransform())
-                .into(photo_view_button)
-        }
+                // Load thumbnail into circular button using Glide
+                Glide.with(photo_view_button)
+                    .load(file)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(photo_view_button)
+            }
     }
 
     /** Helper function used to create a timestamped file */

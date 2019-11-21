@@ -74,6 +74,7 @@
             android:id="@+id/export_button"
             android:layout_marginStart="@dimen/margin_xlarge"
             android:layout_marginBottom="@dimen/margin_small"
+            android:visibility="gone"
             android:layout_width="@dimen/round_button_small"
             android:layout_height="@dimen/round_button_small"
             android:scaleType="fitCenter"
